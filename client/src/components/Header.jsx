@@ -50,11 +50,11 @@ const OptionsWrapper = styled(Box)({
   },
 });
 
-const Header = () => {
+const Header = ({ toggleDrawer }) => {
   return (
     <StyledAppBar position="static">
       <Toolbar>
-        <IconButton>
+        <IconButton onClick={toggleDrawer}>
           <MenuIcon color="action" />
         </IconButton>
         {/* logo for mail */}
