@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Close, Delete, DeleteOutline } from "@mui/icons-material";
+import { Close, DeleteOutline } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -9,7 +9,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 
 let dialogStyle = {
   height: "90%",
@@ -56,13 +56,37 @@ const SendButton = styled(Button)({
 });
 
 const ComposeMailDialog = ({ openDialog, setOpenDialog }) => {
+  const [data, setData] = useState({});
   const closeComposeMail = (e) => {
     e.preventDefault();
     setOpenDialog(false);
   };
 
-  const sendMail = () => {
+  const config = {
+    Host: import.meta.env.VITE_Host,
+    Username: import.meta.env.VITE_Username,
+    Port: import.meta.env.VITE_Port,
+    Password: import.meta.env.VITE_Password,
+  };
+
+  console.log(data);
+  const sendMail = (e) => {
+    e.preventDefault();
+    if (window.Email) {
+      window.Email.send({
+        ...config,
+        To: data.to,
+        From: "thakurarvindkr10@gmail.com", // use your email address to use
+        Subject: data.subject,
+        Body: data.body,
+      }).then((message) => alert(message));
+    }
     setOpenDialog(false);
+  };
+
+  const onValueChanged = (e) => {
+    // console.log(e.target.name, e.target.value);
+    setData({ ...data, [e.target.name]: e.target.value });
   };
 
   return (
@@ -79,13 +103,23 @@ const ComposeMailDialog = ({ openDialog, setOpenDialog }) => {
 
       {/*----------------------------- Content========================= */}
       <RecipientsWrapper>
-        <InputBase placeholder="Recipients" />
-        <InputBase placeholder="Subject" />
+        <InputBase
+          placeholder="Recipients"
+          name="to"
+          onChange={(e) => onValueChanged(e)}
+        />
+        <InputBase
+          placeholder="Subject"
+          name="subject"
+          onChange={(e) => onValueChanged(e)}
+        />
       </RecipientsWrapper>
       {/* ------------------------------TextArea start--------------------------- */}
       <TextField
         multiline
         rows={20}
+        name="body"
+        onChange={(e) => onValueChanged(e)}
         sx={{
           "& .MuiOutlinedInput-notchedOutline": { border: "none" },
         }}
@@ -94,7 +128,11 @@ const ComposeMailDialog = ({ openDialog, setOpenDialog }) => {
       {/*----------------------------- Content End========================= */}
       {/*============================== footer start ======================= */}
       <Footer>
-        <SendButton onClick={sendMail} variant="contained">
+        <SendButton
+          type="submit"
+          onClick={(e) => sendMail(e)}
+          variant="contained"
+        >
           Send
         </SendButton>
         <IconButton onClick={closeComposeMail}>

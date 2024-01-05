@@ -9,7 +9,7 @@ const Main = () => {
   return (
     <div>
       <Header toggleDrawer={toggleDrawer} />
-      <Sidebar  openDrawer={openDrawer}  />
+      <Sidebar openDrawer={openDrawer} />
       <div>Display here emails</div>
     </div>
   );
