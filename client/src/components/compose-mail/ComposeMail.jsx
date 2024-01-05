@@ -10,6 +10,8 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
+import useApi from "../../hooks/useApi";
+import { API_URLS } from "../../services/api.urls";
 
 let dialogStyle = {
   height: "90%",
@@ -57,6 +59,9 @@ const SendButton = styled(Button)({
 
 const ComposeMailDialog = ({ openDialog, setOpenDialog }) => {
   const [data, setData] = useState({});
+
+  const sentEmailServices = useApi(API_URLS.saveSentMails);
+
   const closeComposeMail = (e) => {
     e.preventDefault();
     setOpenDialog(false);
@@ -69,7 +74,7 @@ const ComposeMailDialog = ({ openDialog, setOpenDialog }) => {
     Password: import.meta.env.VITE_Password,
   };
 
-  console.log(data);
+  // console.log(data);
   const sendMail = (e) => {
     e.preventDefault();
     if (window.Email) {
@@ -80,6 +85,25 @@ const ComposeMailDialog = ({ openDialog, setOpenDialog }) => {
         Subject: data.subject,
         Body: data.body,
       }).then((message) => alert(message));
+    }
+
+    const payload = {
+      to: data.to,
+      from: "thakurarvindkr10@gmail.com", // use your email address to use
+      subject: data.subject,
+      body: data.body,
+      date: new Date(),
+      image: "",
+      name: "Arvind Kumar",
+      starred: false,
+      type: "sent",
+    };
+
+    sentEmailServices.call(payload);
+
+    if (!sentEmailServices.error) {
+      setOpenDialog(false);
+      setData({});
     }
     setOpenDialog(false);
   };
