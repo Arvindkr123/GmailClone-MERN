@@ -6,12 +6,12 @@ const useApi = (urlObject) => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const call = async (payload) => {
+  const call = async (payload, type = "") => {
     setResponse(null);
     setError("");
     setLoading(true);
     try {
-      const res = await API(urlObject, payload);
+      const res = await API(urlObject, payload, type);
       setResponse(res);
     } catch (error) {
       console.log(error);

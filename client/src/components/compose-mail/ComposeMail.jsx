@@ -61,10 +61,28 @@ const ComposeMailDialog = ({ openDialog, setOpenDialog }) => {
   const [data, setData] = useState({});
 
   const sentEmailServices = useApi(API_URLS.saveSentMails);
+  const sendDraftMails = useApi(API_URLS.saveDraftEmails);
 
   const closeComposeMail = (e) => {
     e.preventDefault();
-    setOpenDialog(false);
+    const payload = {
+      to: data.to,
+      from: "thakurarvindkr10@gmail.com", // use your email address to use
+      subject: data.subject,
+      body: data.body,
+      date: new Date(),
+      image: "",
+      name: "Arvind Kumar",
+      starred: false,
+      type: "drafts",
+    };
+
+    sendDraftMails.call(payload);
+
+    if (!sendDraftMails.error) {
+      setOpenDialog(false);
+      setData({});
+    }
   };
 
   const config = {
