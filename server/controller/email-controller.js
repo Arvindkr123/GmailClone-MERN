@@ -13,10 +13,11 @@ const saveSentEmailController = (req, res) => {
 const getEmailsController = async (req, res) => {
   try {
     let emails;
-    if (req.params.type === "sent") {
-      emails = await EmailModel.find({ type: req.params.type });
-    }
-    if (req.params.type === "drafts") {
+    if (req.params.type === "bin") {
+      emails = await EmailModel.find({ bin: true });
+    } else if (req.params.type === "allmail") {
+      emails = await EmailModel.find({});
+    } else {
       emails = await EmailModel.find({ type: req.params.type });
     }
     return res.status(200).json(emails);
@@ -26,4 +27,21 @@ const getEmailsController = async (req, res) => {
   }
 };
 
-export { saveSentEmailController, getEmailsController };
+const moveEmailsToBinController = async (req, res) => {
+  try {
+    await EmailModel.updateMany(
+      { _id: { $in: req.body } },
+      { $set: { bin: true, starred: false, type: "" } }
+    );
+    return res.status(200).json("emails deleted successfully...");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error: error.message });
+  }
+};
+
+export {
+  saveSentEmailController,
+  getEmailsController,
+  moveEmailsToBinController,
+};

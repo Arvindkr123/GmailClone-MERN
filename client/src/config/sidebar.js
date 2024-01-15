@@ -24,7 +24,7 @@ export const sidebarData = [
     icon: SendOutlined,
   },
   {
-    name: "darfts",
+    name: "drafts",
     title: "Drafts",
     icon: InsertDriveFileOutlined,
   },
