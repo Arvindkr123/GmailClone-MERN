@@ -29,7 +29,7 @@ export const EMPTY_TABS = {
     subHeading: "",
   },
   allmail: {
-    heading: "No conversations Mails found",
+    heading: "You don't have any mail! Our servers are feeling unloved.",
     subHeading: "",
   },
 };
