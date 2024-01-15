@@ -7,9 +7,9 @@ const Sidebar = ({ openDrawer }) => {
     <Drawer
       anchor="left"
       open={openDrawer}
-      hideBackdrop="true"
+      hideBackdrop={true}
       ModalProps={{
-        keepMounted: "true",
+        keepMounted: true,
       }}
       variant="persistent"
       sx={{
